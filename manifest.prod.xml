@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- PRODUCTION manifest for AppSource submission.
-     Before submitting, replace every "delta.example.com" with your real
+     Before submitting, replace every "yech14.github.io/delta-excel" with your real
      HTTPS host (see PUBLISHING.md). The dev manifest (manifest.xml, localhost,
      different Id) can stay sideloaded alongside this one without conflict. -->
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
@@ -15,9 +15,9 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Delta"/>
   <Description DefaultValue="Version history for Excel. Review every change cell by cell, save named versions, and revert safely — everything stays on your computer."/>
-  <IconUrl DefaultValue="https://delta.example.com/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://delta.example.com/assets/icon-80.png"/>
-  <SupportUrl DefaultValue="https://delta.example.com/site/support.html"/>
+  <IconUrl DefaultValue="https://yech14.github.io/delta-excel/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://yech14.github.io/delta-excel/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="https://yech14.github.io/delta-excel/site/support.html"/>
 
   <Hosts>
     <Host Name="Workbook"/>
@@ -30,7 +30,7 @@
   </Requirements>
 
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://delta.example.com/src/taskpane.html"/>
+    <SourceLocation DefaultValue="https://yech14.github.io/delta-excel/src/taskpane.html"/>
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -78,12 +78,12 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Delta.Icon16" DefaultValue="https://delta.example.com/assets/icon-16.png"/>
-        <bt:Image id="Delta.Icon32" DefaultValue="https://delta.example.com/assets/icon-32.png"/>
-        <bt:Image id="Delta.Icon80" DefaultValue="https://delta.example.com/assets/icon-80.png"/>
+        <bt:Image id="Delta.Icon16" DefaultValue="https://yech14.github.io/delta-excel/assets/icon-16.png"/>
+        <bt:Image id="Delta.Icon32" DefaultValue="https://yech14.github.io/delta-excel/assets/icon-32.png"/>
+        <bt:Image id="Delta.Icon80" DefaultValue="https://yech14.github.io/delta-excel/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Delta.PaneUrl" DefaultValue="https://delta.example.com/src/taskpane.html"/>
+        <bt:Url id="Delta.PaneUrl" DefaultValue="https://yech14.github.io/delta-excel/src/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="Delta.GroupLabel" DefaultValue="Delta"/>
