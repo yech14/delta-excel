@@ -1,0 +1,816 @@
+/* Save & Review — "Ledger" design system
+   Editorial / private-bank aesthetic: warm ivory paper, warm near-black ink,
+   a single brass accent, hairline rules instead of cards and shadows,
+   serif display type, letterspaced caps for micro-labels. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper: #ffffff;
+  --paper-2: #f2f1ed;
+  --card: #ffffff;
+  --ink: #171512;
+  --ink-2: #6e685d;
+  --ink-3: #a49d8f;
+  --line: #e3dfd5;
+  --line-2: #d5d0c3;
+  --brass: #a5804c;
+  --brass-2: #8a6a3c;
+  --add: #33684e;
+  --del: #99453c;
+  --edit: #8a6c2e;
+  --recalc: #5c6b78;
+  --sans: -apple-system, "SF Pro Text", "Helvetica Neue", "Segoe UI", sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+html { height: 100%; }
+
+/* stroke icon set */
+.ico {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -2px;
+  flex-shrink: 0;
+}
+
+body {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 12px 14px 16px;
+  min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* the pane must never scroll sideways */
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: rgba(165, 128, 76, .22); }
+
+/* ---------- header ---------- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line-2);
+  position: relative;
+  /* keep clear of the "i" badge Excel overlays on sideloaded dev add-ins */
+  padding-right: 34px;
+}
+/* a short brass tick on the header rule */
+.brand::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 28px;
+  height: 1px;
+  background: var(--brass);
+}
+.logo { flex-shrink: 0; color: var(--ink); }
+.brand-text { min-width: 0; flex: 1; }
+.brand-name {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.icon-btn { padding: 6px 8px; line-height: 0; border: none; }
+.icon-btn .ico { width: 14px; height: 14px; }
+
+/* ---------- micro-label ---------- */
+
+.settings-title,
+.section-title,
+.sheet-name {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--ink-2);
+}
+.sheet-name { font-size: 10.5px; font-weight: 800; color: var(--ink); }
+
+/* ---------- settings panel ---------- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+.settings { padding: 11px 13px 12px; margin-bottom: 12px; animation: rise .3s var(--ease) both; }
+.settings-title { margin-bottom: 9px; }
+.settings-title-gap { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.radio {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 12px;
+  color: var(--ink-2);
+  padding: 4px 0;
+  cursor: pointer;
+}
+.radio input { accent-color: var(--ink); cursor: pointer; }
+.radio b { color: var(--ink); font-weight: 600; }
+.hint { font-size: 11px; color: var(--ink-3); margin-top: 7px; line-height: 1.5; }
+.login-row { display: flex; gap: 8px; align-items: flex-end; }
+
+/* underline inputs — editorial style */
+.login-row input,
+.gh-repo {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  font: inherit;
+  padding: 6px 1px;
+  border: none;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  transition: border-color .2s var(--ease);
+}
+.gh-repo { margin-bottom: 8px; }
+.login-row input::placeholder,
+.gh-repo::placeholder { color: var(--ink-3); }
+.login-row input:focus,
+.gh-repo:focus {
+  outline: none;
+  border-bottom-color: var(--brass);
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.account-row .ico { color: var(--brass); }
+.account-row button { margin-left: auto; }
+
+/* ---------- buttons ---------- */
+
+button {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease),
+              border-color .2s var(--ease), opacity .2s var(--ease);
+}
+button:hover:not(:disabled) { border-color: var(--ink); }
+button:active:not(:disabled) { background: var(--paper-2); }
+button:disabled { opacity: .35; cursor: default; }
+
+button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--card);
+}
+button.primary:hover:not(:disabled) {
+  background: #000;
+  border-color: #000;
+}
+button.primary:active:not(:disabled) { background: var(--brass-2); border-color: var(--brass-2); }
+
+button.big {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 11.5px;
+  letter-spacing: .16em;
+}
+
+/* file name + folder above the review button */
+.file-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-2);
+  margin: 0 1px 7px;
+  min-width: 0;
+}
+.file-line .ico { width: 11px; height: 11px; align-self: center; color: var(--ink-3); }
+/* nudge shown only while the workbook was never saved to disk */
+.file-line .save-file {
+  font-size: 8.5px;
+  letter-spacing: .1em;
+  padding: 2px 8px;
+  border: 1px solid var(--edit);
+  border-radius: 2px;
+  color: var(--edit);
+  background: transparent;
+  align-self: center;
+  flex-shrink: 0;
+  order: 1;
+  margin-left: auto;
+}
+.file-line .save-file:hover:not(:disabled) {
+  background: rgba(178, 106, 0, .08);
+  border-color: var(--edit);
+}
+.file-line #file-name { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.file-line #file-dir {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+button.big .ico { width: 13px; height: 13px; }
+
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+button.ghost:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: transparent;
+  background: var(--paper-2);
+}
+button.small { font-size: 9.5px; letter-spacing: .12em; padding: 5px 9px; }
+
+/* ---------- empty state ---------- */
+
+.empty {
+  text-align: center;
+  padding: 24px 18px 22px;
+  animation: rise .35s var(--ease) both;
+}
+.empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  box-shadow: 0 0 0 4px var(--card), 0 0 0 5px var(--line-2);
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.empty-icon .ico { width: 20px; height: 20px; stroke-width: 1.4; }
+.empty h2 {
+  font-size: 14.5px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.empty p { color: var(--ink-2); font-size: 12px; margin: 0 auto 20px; max-width: 250px; }
+
+/* ---------- status line ---------- */
+
+.status {
+  font-size: 11px;
+  letter-spacing: .03em;
+  color: var(--ink-2);
+  margin: 6px 1px;
+}
+.status:empty { display: none; }
+.status.ok { color: var(--add); }
+.status.err { color: var(--del); }
+
+/* ---------- review results ---------- */
+
+#results { animation: rise .35s var(--ease) both; }
+
+/* Pinned to the top while the diff scrolls underneath — the mirror of the
+   floating save card at the bottom (.floating toggled from JS). */
+.summary-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: var(--paper);
+  margin: 4px -14px 4px;
+  padding: 4px 14px 6px;
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.summary-bar.floating {
+  border-bottom-color: var(--line-2);
+  box-shadow: 0 6px 16px rgba(23, 21, 18, .07);
+}
+
+/* highlight toggle as a small outlined chip */
+.hl-actions button {
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink-2);
+}
+.hl-actions button:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--card);
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 9px;
+  min-width: 0;
+}
+
+/* git-diffstat strip: proportional color bar + compact mono counters */
+.stat-bar {
+  flex: 1;
+  min-width: 36px;
+  display: flex;
+  gap: 2px;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stat-bar .seg { display: block; min-width: 4px; border-radius: 2px; }
+.seg-add { background: var(--add); }
+.seg-edit { background: var(--edit); }
+.seg-del { background: var(--del); }
+.stat-nums {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.stat-nums b { font-weight: 600; }
+.sn-add { color: var(--add); }
+.sn-edit { color: var(--edit); }
+.sn-del { color: var(--del); }
+.sn-sheet { color: var(--recalc); display: inline-flex; align-items: center; gap: 2px; }
+.sn-sheet .ico { width: 10px; height: 10px; }
+/* pills become quiet inline counts with a small colored marker */
+.pill {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  color: var(--ink-2);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.pill .ico { display: none; }
+.pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  align-self: center;
+  flex-shrink: 0;
+}
+.pill.total {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.pill.total::before { content: none; }
+.pill.zero {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--add);
+}
+.pill.zero::before { content: none; }
+.pill.add::before { background: var(--add); }
+.pill.edit::before { background: var(--edit); }
+.pill.del::before { background: var(--del); }
+.pill.sheet::before { background: var(--recalc); }
+
+/* thin full-width highlight bar above the counts */
+.hl-actions { display: flex; order: -1; }
+.hl-actions button { flex: 1; padding: 3px 9px; }
+
+/* highlight color legend — redundant with the summary count dots, so hidden */
+.hl-legend { display: none !important; }
+
+.compare-note {
+  font-size: 11.5px;
+  color: var(--ink-2);
+  border-left: 2px solid var(--brass);
+  padding: 2px 0 2px 12px;
+  margin-bottom: 14px;
+}
+
+.sheet-event {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0 4px 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--edit);
+  border-left: 2px solid var(--edit);
+}
+.sheet-event.ev-add { color: var(--add); border-left-color: var(--add); }
+.sheet-event.ev-del { color: var(--del); border-left-color: var(--del); }
+
+/* ---------- sheet ledger ---------- */
+
+/* each sheet is a framed card, like the save bubble but resting in the flow */
+.sheet-block {
+  margin-bottom: 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--card);
+  padding: 8px 12px 3px;
+  overflow: hidden;
+}
+.sheet-block .change:last-child { border-bottom: none; }
+.collapsed.sheet-block { padding-bottom: 8px; }
+.collapsed .sheet-name { border-bottom: none; padding-bottom: 0; }
+.sheet-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 1px 6px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+/* Tabs layout, GitHub-style: one frame; the tab strip is its header and the
+   chosen sheet's changes open directly below it, inside the same border. */
+.tab-frame {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--card);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+/* The strip's bottom rule is painted as a 1px background line on the row —
+   not a border — so the active tab's own background can sit on top of it and
+   fuse seamlessly with the panel below (a border can't be covered by a child
+   once the strip clips for horizontal scrolling). */
+.tabs-row {
+  display: flex;
+  align-items: flex-end;
+  background:
+    linear-gradient(var(--line-2), var(--line-2)) left bottom / 100% 1px no-repeat,
+    var(--paper-2);
+}
+.sheet-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;          /* the strip scrolls, but stays clean */
+  padding: 7px 8px 0;
+}
+.sheet-tabs::-webkit-scrollbar { display: none; }
+/* ‹ › — shown only when there are more tabs than fit the strip */
+.tab-nav {
+  border: none;
+  background: transparent;
+  padding: 6px 5px 7px;
+  line-height: 0;
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+.tab-nav:hover:not(:disabled) { color: var(--ink); border-color: transparent; background: transparent; }
+.tab-nav .ico { width: 11px; height: 11px; }
+.tab-nav.left .ico { transform: rotate(180deg); }
+.sheet-tab {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 6px 10px 6px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  color: var(--ink-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sheet-tab:hover:not(.active) { color: var(--ink); border-color: transparent; }
+.sheet-tab.active {
+  background: var(--card);
+  border-color: var(--line-2);
+  color: var(--ink);
+}
+.sheet-tab .tab-count {
+  margin-left: 6px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-3);
+}
+.sheet-tab.active .tab-count { color: var(--brass); }
+/* pages sit inside the frame — no border of their own */
+.tab-page { display: none; }
+.tab-page.active { display: block; }
+.tab-frame .sheet-block {
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+  padding-top: 6px;
+}
+
+/* stacked layout: sheet header toggles its changes */
+.collapsible .sheet-name { cursor: pointer; user-select: none; }
+.collapsible .sheet-name:hover { color: var(--ink); }
+.collapsible .chev { width: 10px; height: 10px; transition: transform .2s var(--ease); }
+.collapsible:not(.collapsed) .chev { transform: rotate(90deg); }
+.collapsed > :not(.sheet-name) { display: none; }
+.sheet-count {
+  margin-left: auto;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+}
+
+.change {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 8px;
+  padding: 5px 1px;
+  border-bottom: 1px solid var(--line);
+  /* address column centers vertically against the row, even for two-line
+     old+new changes */
+  align-items: center;
+}
+.change .addr {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: none;
+  color: var(--ink-2);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 3px 5px;
+  justify-self: center;
+  text-align: center;
+  cursor: pointer;
+  transition: background .15s var(--ease);
+}
+.change .addr:hover { background: rgba(23, 21, 18, .07); }
+@supports (background: color-mix(in srgb, red 10%, transparent)) {
+  /* faded square in the address's own color */
+  .change .addr:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+}
+.change .addr.t-edit { color: var(--edit); }
+.change .addr.t-add { color: var(--add); }
+.change .addr.t-del { color: var(--del); }
+
+.change .old, .change .new {
+  display: block;
+  font-size: 12.5px;
+  padding: 1px 0 1px 9px;
+  word-break: break-all;
+  border-left: 2px solid transparent;
+}
+/* git-style gutter signs */
+.change .old::before, .change .new::before {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-block;
+  width: 12px;
+  margin-right: 2px;
+}
+.change .old::before { content: "−"; }
+.change .new::before { content: "+"; }
+.change .old {
+  border-left-color: var(--del);
+  color: var(--del);
+  background: rgba(217, 48, 37, .05);
+  opacity: .75;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  margin-bottom: 2px;
+}
+.change .old:last-child { margin-bottom: 0; }
+.change .new {
+  border-left-color: var(--add);
+  color: var(--add);
+  background: rgba(24, 128, 56, .05);
+  cursor: text;
+}
+.change .new:hover { background: rgba(24, 128, 56, .11); }
+/* inline editor that writes straight into the cell on Enter */
+.cell-edit {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 100%;
+}
+/* ↩ chip shown after an edit made from the pane: restores the pre-edit value */
+.undo-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease);
+}
+.undo-edit:hover { background: rgba(217, 48, 37, .08); color: var(--del); border-color: currentColor; }
+.undo-edit:disabled { opacity: .4; cursor: default; }
+.undo-edit .ico { width: 13px; height: 13px; }
+
+.change.recalc { opacity: .55; }
+.change.recalc .old {
+  text-decoration: none;
+  border-left-color: var(--line-2);
+  color: var(--ink-2);
+  background: transparent;
+}
+.change.recalc .new {
+  border-left-color: var(--recalc);
+  color: var(--ink-2);
+  background: rgba(26, 115, 232, .05);
+}
+
+.recalc-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10.5px;
+  letter-spacing: .03em;
+  color: var(--ink-3);
+  padding: 6px 1px 1px;
+}
+.recalc-note .ico { width: 11px; height: 11px; }
+
+.truncate-note { font-size: 11px; color: var(--ink-3); margin: 6px 1px 10px; }
+
+/* ---------- sticky save bar ---------- */
+
+/* Bubbles above the content as a card only while it is actually stuck to the
+   bottom of the viewport; once scrolled to its natural spot it lies flat on
+   the page with no frame (the .floating class is toggled from JS). */
+.confirm {
+  position: sticky;
+  bottom: 8px;
+  background: var(--paper);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 12px 11px;
+  margin-top: 8px;
+  z-index: 5;
+  transition: background .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.confirm.floating {
+  background: rgba(255, 255, 255, .9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-color: var(--line-2);
+  box-shadow: 0 2px 6px rgba(23, 21, 18, .06), 0 10px 30px rgba(23, 21, 18, .14);
+}
+.confirm input {
+  width: 100%;
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 1px 6px;
+  border: none;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  margin-bottom: 8px;
+  background: transparent;
+  color: var(--ink);
+  transition: border-color .2s var(--ease);
+}
+.confirm input::placeholder { color: var(--ink-3); }
+.confirm input:focus {
+  outline: none;
+  border-bottom-color: var(--brass);
+}
+.confirm-buttons { display: flex; gap: 10px; }
+.confirm-buttons .primary { flex: 1; }
+/* revert-preview mode: the confirm button turns destructive red */
+#btn-accept.revert { background: var(--del); border-color: var(--del); }
+#btn-accept.revert:hover:not(:disabled) { background: #b3271e; border-color: #b3271e; }
+
+/* ---------- history timeline ---------- */
+
+.section-title { margin: 16px 1px 8px; display: flex; align-items: baseline; gap: 6px; }
+.section-title span { color: var(--ink-3); font-weight: 500; letter-spacing: .08em; }
+.section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  align-self: center;
+  margin-left: 4px;
+}
+
+.timeline { position: relative; padding-left: 16px; }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: var(--line-2);
+}
+.history-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 1px 5px 4px;
+}
+.history-row::before {
+  content: "";
+  position: absolute;
+  left: -15.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--ink-3);
+}
+.history-row.latest::before {
+  background: var(--brass);
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(165, 128, 76, .18);
+}
+.history-info { min-width: 0; }
+.history-msg {
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.history-when {
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+.history-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
+}
+.history-actions button { white-space: nowrap; }
+button.ghost.danger { color: var(--del); background: transparent; }
+button.ghost.danger:hover:not(:disabled) { background: rgba(153, 69, 60, .08); color: var(--del); }
+
+/* ---------- motion ---------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

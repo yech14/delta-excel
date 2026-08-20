@@ -1,0 +1,12 @@
+{
+  "name": "excel-save-review",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Excel add-in prototype: review exactly what changed before saving a version.",
+  "scripts": {
+    "certs": "npx office-addin-dev-certs install",
+    "start": "node server.js",
+    "server": "node server/index.js",
+    "sideload": "node sideload.js"
+  }
+}
